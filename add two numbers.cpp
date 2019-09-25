@@ -2,51 +2,57 @@
 class Solution {
 public:
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        vector<int> m1,m2;
+        ListNode* k=new ListNode(0);
+        k=l1;
+        int n1=0;
         
-        while (l1!=NULL){
-            m1.push_back(l1->val);
-            l1=l1->next;
+        while (k->next!=NULL){
+            n1++;
+            k=k->next;
         }
         
-        while (l2!=NULL){
-            m2.push_back(l2->val);
-            l2=l2->next;
+        k=l2;
+        int n2=0;
+        
+        while (k->next!=NULL){
+            n2++;
+            k=k->next;
         }
         
-        int n1=m1.size(), n2=m2.size();   
-        int n=min(n1,n2);
+        ListNode* l=new ListNode(0);
+        k=l;
+        int n=min(n1,n2), sum=0;
         
-        int sum=0;
-        l1=new ListNode(0);
-        l2=l1;
-        for (int i=0; i<n; i++){
-            sum+=m1[i]+m2[i];//находим сумму двух разрядов
-            l1->next=new ListNode(sum%10);//записываем mod 10
-            l1=l1->next;
-            sum/=10;//перекидываем в следующую сумму div 10
-        }
-        if (n1>n2){//если первый список длинне второго
-            for (int i=n2; i<n1; i++){//идем с позиции на которой остановились 
-            sum+=m1[i];
-            l1->next=new ListNode(sum%10);
-            l1=l1->next;
+        for (int i=0; i<=n; i++){
+            sum+=l1->val+l2->val;
+            l->next=new ListNode(sum%10);
             sum/=10;
+            l=l->next;
+            l1=l1->next;
+            l2=l2->next;
+        } 
+        if (n1>n2){
+            for (int i=n; i<n1; i++){
+                sum+=l1->val;
+                l->next=new ListNode(sum%10);
+                sum/=10;
+                l=l->next;
+                l1=l1->next;
             }
         }else{
-            if (n2>n1){//если второй длиннее первого
-            for (int i=n1; i<n2; i++){
-                sum+=m2[i];
-                l1->next=new ListNode(sum%10);
-                l1=l1->next;
+            if(n2>n1){
+                for (int i=n; i<n2; i++){
+                sum+=l2->val;
+                l->next=new ListNode(sum%10);
                 sum/=10;
-                }
+                l=l->next;
+                l2=l2->next;
             }
             }
-        
-        if (sum>0){
-            l1->next=new ListNode(sum%10);
         }
-        return l2->next;
+        if (sum!=0){
+            l->next=new ListNode(sum);
+        }
+        return k->next;   
     }
 };
